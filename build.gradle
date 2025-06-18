@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.poi:poi:5.2.4'
+    implementation 'org.apache.poi:poi-ooxml:5.2.4'
+    implementation 'org.apache.xmlbeans:xmlbeans:5.1.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.1'
+
+    //For writing in to Json in Hierarchy class
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+application {
+    mainClass = 'com.employee.management.EmployeeDataGenerator'
+    mainClass = 'com.employee.management.GratuityEligibilityChecker'
+    mainClass = 'com.employee.management.EmployeeSalaryAnalyzer'
+    mainClass = 'com.employee.management.EmployeeHierarchyBuilder'
+    mainClass = 'com.employee.management.NthSalaryFinder'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(24)
+    }
+}
+/*
+
+tasks.register('runMainClass2', JavaExec) {
+    group = 'application'
+    description ='Runs MainClass2'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('com.employee.management.GratuityEligibilityChecker')
+}
+
+tasks.register('runMainClass3', JavaExec) {
+    group = 'application'
+    description ='Runs MainClass3'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('com.employee.management.EmployeeSalaryAnalyzer')
+}
+
+tasks.register('runMainClass4', JavaExec) {
+    group = 'application'
+    description ='Runs MainClass4'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('com.employee.management.EmployeeHierarchyBuilder')
+}
+
+
+tasks.register('runAll') {
+    group = 'application'
+    description = 'Runs alll main classes sequentially'
+    dependsOn 'runMainClass2', 'runMainClass3', 'runMainClass4'
+}*/

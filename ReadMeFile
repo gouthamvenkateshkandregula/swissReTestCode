@@ -1,0 +1,61 @@
+=== SQL QUERIES FOR FINDING NTH HIGHEST SALARY ===
+
+1. ROW_NUMBER() Method:
+   - Assigns unique sequential numbers to rows
+   - Good when you want exactly the nth employee (no ties)
+
+SELECT id, name, role, manager_id, salary, salary_rank
+FROM (
+    SELECT id, name, role, manager_id, salary,
+           ROW_NUMBER() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees
+) ranked_employees
+WHERE salary_rank = ?;
+
+2. DENSE_RANK() Method:
+   - Handles salary ties properly
+   - Best when multiple employees can have same salary
+
+SELECT id, name, role, manager_id, salary, salary_rank
+FROM (
+    SELECT id, name, role, manager_id, salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees
+) ranked_employees
+WHERE salary_rank = ?;
+
+3. LIMIT/OFFSET Method:
+   - Simple and efficient for large datasets
+   - Database-specific syntax
+
+SELECT id, name, role, manager_id, salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET ?;
+
+4. Subquery Method:
+   - Works with any SQL database
+   - Self-explanatory logic
+
+SELECT e1.id, e1.name, e1.role, e1.manager_id, e1.salary
+FROM employees e1
+WHERE (
+    SELECT COUNT(DISTINCT e2.salary)
+    FROM employees e2
+    WHERE e2.salary > e1.salary
+) = ? - 1
+ORDER BY e1.salary DESC
+LIMIT 1;
+
+5. CTE (Common Table Expression) Method:
+   - Most readable and maintainable
+   - Modern SQL standard
+
+WITH RankedEmployees AS (
+    SELECT id, name, role, manager_id, salary,
+           DENSE_RANK() OVER (ORDER BY salary DESC) AS salary_rank
+    FROM employees
+)
+SELECT id, name, role, manager_id, salary
+FROM RankedEmployees
+WHERE salary_rank = ?;
